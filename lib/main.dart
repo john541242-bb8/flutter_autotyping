@@ -27,45 +27,46 @@ class _AutoTypingState extends State<AutoTyping> {
   //   }
   // }
 
-  final Map<String, int> charToKey = {
+  final Map<String, PhysicalKeyboardKey> charToKey = {
     // Letters
-    'A': 0x00070004,
-    'B': 0x00070005,
-    'C': 0x00070006,
-    'D': 0x00070007,
-    'E': 0x00070008,
-    'F': 0x00070009,
-    'G': 0x0007000A,
-    'H': 0x0007000B,
-    'I': 0x0007000C,
-    'J': 0x0007000D,
-    'K': 0x0007000E,
-    'L': 0x0007000F,
-    'M': 0x00070010,
-    'N': 0x00070011,
-    'O': 0x00070012,
-    'P': 0x00070013,
-    'Q': 0x00070014,
-    'R': 0x00070015,
-    'S': 0x00070016,
-    'T': 0x00070017,
-    'U': 0x00070018,
-    'V': 0x00070019,
-    'W': 0x0007001A,
-    'X': 0x0007001B,
-    'Y': 0x0007001C, 'Z': 0x0007001D,
+    'a': PhysicalKeyboardKey.findKeyByCode(0x00070004)!,
+    'b': PhysicalKeyboardKey.findKeyByCode(0x00070005)!,
+    'c': PhysicalKeyboardKey.findKeyByCode(0x00070006)!,
+    'd': PhysicalKeyboardKey.findKeyByCode(0x00070007)!,
+    'e': PhysicalKeyboardKey.findKeyByCode(0x00070008)!,
+    'f': PhysicalKeyboardKey.findKeyByCode(0x00070009)!,
+    'g': PhysicalKeyboardKey.findKeyByCode(0x0007000A)!,
+    'h': PhysicalKeyboardKey.findKeyByCode(0x0007000B)!,
+    'i': PhysicalKeyboardKey.findKeyByCode(0x0007000C)!,
+    'j': PhysicalKeyboardKey.findKeyByCode(0x0007000D)!,
+    'k': PhysicalKeyboardKey.findKeyByCode(0x0007000E)!,
+    'l': PhysicalKeyboardKey.findKeyByCode(0x0007000F)!,
+    'm': PhysicalKeyboardKey.findKeyByCode(0x00070010)!,
+    'n': PhysicalKeyboardKey.findKeyByCode(0x00070011)!,
+    'o': PhysicalKeyboardKey.findKeyByCode(0x00070012)!,
+    'p': PhysicalKeyboardKey.findKeyByCode(0x00070013)!,
+    'q': PhysicalKeyboardKey.findKeyByCode(0x00070014)!,
+    'r': PhysicalKeyboardKey.findKeyByCode(0x00070015)!,
+    's': PhysicalKeyboardKey.findKeyByCode(0x00070016)!,
+    't': PhysicalKeyboardKey.findKeyByCode(0x00070017)!,
+    'u': PhysicalKeyboardKey.findKeyByCode(0x00070018)!,
+    'v': PhysicalKeyboardKey.findKeyByCode(0x00070019)!,
+    'w': PhysicalKeyboardKey.findKeyByCode(0x0007001A)!,
+    'x': PhysicalKeyboardKey.findKeyByCode(0x0007001B)!,
+    'y': PhysicalKeyboardKey.findKeyByCode(0x0007001C)!,
+    'z': PhysicalKeyboardKey.findKeyByCode(0x0007001D)!,
 
     // Numbers (top row)
-    '0': 0x00070062,
-    '1': 0x00070059,
-    '2': 0x0007005a,
-    '3': 0x0007005b,
-    '4': 0x0007005c,
-    '5': 0x0007005d,
-    '6': 0x0007005e,
-    '7': 0x0007005f,
-    '8': 0x00070060,
-    '9': 0x00070061,
+    '0': PhysicalKeyboardKey.findKeyByCode(0x00070062)!,
+    '1': PhysicalKeyboardKey.findKeyByCode(0x00070059)!,
+    '2': PhysicalKeyboardKey.findKeyByCode(0x0007005a)!,
+    '3': PhysicalKeyboardKey.findKeyByCode(0x0007005b)!,
+    '4': PhysicalKeyboardKey.findKeyByCode(0x0007005c)!,
+    '5': PhysicalKeyboardKey.findKeyByCode(0x0007005d)!,
+    '6': PhysicalKeyboardKey.findKeyByCode(0x0007005e)!,
+    '7': PhysicalKeyboardKey.findKeyByCode(0x0007005f)!,
+    '8': PhysicalKeyboardKey.findKeyByCode(0x00070060)!,
+    '9': PhysicalKeyboardKey.findKeyByCode(0x00070061)!,
   };
 
   Future<void> realTyping(String text, Duration delay) async {
@@ -73,6 +74,28 @@ class _AutoTypingState extends State<AutoTyping> {
       if (stopTyping) {
         stopTyping = false;
         return;
+      }
+      bool isup = isUpperWord(char) && isLetter(char);
+
+      //檢查英文字母
+      if (charToKey[char.toLowerCase()] != null) {
+        if (isup) {
+          keyPressSimulator.simulateKeyDown(
+            PhysicalKeyboardKey.shiftLeft,
+          );
+          keyPressSimulator.simulateKeyDown(charToKey[char]);
+          await Future.delayed(Duration(milliseconds: 20));
+
+          keyPressSimulator.simulateKeyUp(charToKey[char]);
+
+          keyPressSimulator.simulateKeyUp(
+            PhysicalKeyboardKey.shiftLeft,
+          );
+        } else {
+          typing(charToKey[char]!);
+        }
+        print("這個key是${charToKey[char]}，他是大寫還是小寫 $isup");
+        continue;
       }
       //特殊字元情況
       if (char == " ") {
@@ -114,41 +137,6 @@ class _AutoTypingState extends State<AutoTyping> {
         print("按下換行了");
         await typing(PhysicalKeyboardKey.enter);
         continue;
-      }
-      bool isup = isUpperWord(char) && isLetter(char);
-      //檢查英文字母
-
-      if (charToKey[char.toUpperCase()] != null) {
-        if (isup) {
-          keyPressSimulator.simulateKeyDown(
-            PhysicalKeyboardKey.shiftLeft,
-          );
-          keyPressSimulator.simulateKeyDown(
-            PhysicalKeyboardKey.findKeyByCode(
-              charToKey[char.toUpperCase()]!,
-            ),
-          );
-          await Future.delayed(Duration(milliseconds: 20));
-
-          keyPressSimulator.simulateKeyUp(
-            PhysicalKeyboardKey.findKeyByCode(
-              charToKey[char.toUpperCase()]!,
-            ),
-          );
-
-          keyPressSimulator.simulateKeyUp(
-            PhysicalKeyboardKey.shiftLeft,
-          );
-        } else {
-          typing(
-            PhysicalKeyboardKey.findKeyByCode(
-              charToKey[char.toUpperCase()]!,
-            )!,
-          );
-        }
-        print(
-          "這個key是${PhysicalKeyboardKey.findKeyByCode(charToKey[char.toUpperCase()]!)}，他是大寫還是小寫 $isup",
-        );
       }
 
       // for (var key in commonlykeys) {
