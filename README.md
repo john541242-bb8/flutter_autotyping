@@ -1,16 +1,32 @@
-# flutter_autotyping
+⌨️ 自動化打字程式 (AutoTyping)
+這是一個使用 Flutter 開發的桌面端自動化打字工具。它利用 keypress_simulator 庫來模擬真實的鍵盤按鍵輸入，能夠將預先輸入的文字自動鍵入到任何目標應用程式（如記事本、IDE 或瀏覽器）中。
 
-A new Flutter project.
+(建議在此處放一張你的應用程式運行截圖)
 
-## Getting Started
+✨ 功能特色
+🚀 高效能按鍵查找：使用 Map (Hash Map) 結構取代傳統的 List 遍歷，實現 O(1) 的按鍵查找速度，大幅降低輸入延遲。
 
-This project is a starting point for a Flutter application.
+⚡ 可自定義打字速度：透過滑桿調整每個字元之間的輸入間隔（1ms - 100ms），適應不同電腦效能與輸入場景。
 
-A few resources to get you started if this is your first Flutter project:
+⏳ 倒數計時啟動：設定按下開始後的緩衝時間（秒），讓你有足夠的時間切換視窗並將游標對準目標位置。
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+🔠 完整字元支援：
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+自動識別並處理大小寫（自動模擬 Shift 鍵）。
+
+支援常見特殊符號（如 !, @, (, ), ? 等）。
+
+支援換行符處理。
+
+⏸️ 隨時暫停：打字過程中可隨時點擊按鈕停止輸入。
+
+🎨 可愛 UI 設計：背景融合可愛貓咪圖片與自定義字體（Cubic & MapleMono），讓工具不枯燥。
+
+🛠️ 技術棧
+Framework: Flutter
+
+Language: Dart
+
+Core Package: keypress_simulator - 用於模擬系統層級的鍵盤事件。
+
+(以上先由ai生成，之後在不上我的readme.md)
