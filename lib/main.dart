@@ -84,11 +84,11 @@ class _AutoTypingState extends State<AutoTyping> {
         stopTyping = false;
         return;
       }
-      bool isup = isUpperWord(char);
       PhysicalKeyboardKey? key = charToKey[char.toLowerCase()];
 
       //檢查英文字母
       if (key != null) {
+        bool isup = isUpperWord(char) && isLetter(char);
         if (isup) {
           keyPressSimulator.simulateKeyDown(
             PhysicalKeyboardKey.shiftLeft,
